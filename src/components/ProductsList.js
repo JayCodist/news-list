@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Layout, Button, notification, Row } from "antd";
+import { Table, Layout, Button, notification, Row, Modal } from "antd";
 import { EditFilled, DeleteFilled } from '@ant-design/icons';
 import moment from "moment";
 import AddEditProductsModal from "./AddEditProductsModal";
 
-const backendUrl = "http://localhost:8080"//"https://avios-api.herokuapp.com";
+const { confirm } = Modal;
+
+const backendUrl = "https://avios-api.herokuapp.com";
 
 export default props =>
 {
@@ -12,6 +14,55 @@ export default props =>
     const [isLoading, setIsLoading] = useState(false);
     const [product, setProduct] = useState(null);
     const [showAddEditModal, setShowAddEditModal] = useState(false);
+
+    const handleEdit = prod =>
+    {
+        setProduct(prod);
+        setShowAddEditModal(true);
+    }
+
+    const handleDelete = async prod =>
+    {
+        confirm(
+        {
+            title: `Do you want to delete product: "${prod.product_name}"?`,
+            onOk: async () =>
+            {
+                const resp = await fetch(backendUrl,
+                {
+                    method: "DELETE",
+                    headers:
+                    {
+                        'Content-Type': 'application/json',
+                        'Origin': 'test-client'
+                    },
+                    body: JSON.stringify(prod)
+                });
+                const json = await resp.json();
+                if (json.error)
+                {
+                    console.log("error: ", json.error)
+                    notification.error({ message: `Error occured: ${json.error}` });
+                }
+                else
+                {
+                    notification.success({ message: "Product Deleted"});
+                    fetchProducts();
+                }
+            }
+        })
+    }
+
+    const closeModal = () =>
+    {
+        setProduct(null);
+        setShowAddEditModal(false);
+    }
+
+    useEffect(() =>
+    {
+        fetchProducts();
+    }, []);
 
     const fetchProducts = async () =>
     {
@@ -54,35 +105,13 @@ export default props =>
         }
     }
 
-    const handleEdit = prod =>
-    {
-        setProduct(prod);
-        setShowAddEditModal(true);
-    }
-
-    const handleDelete = async prod =>
-    {
-        
-    }
-
-    const closeModal = () =>
-    {
-        setProduct(null);
-        setShowAddEditModal(false);
-    }
-
-    useEffect(() =>
-    {
-        fetchProducts();
-    }, [])
-
     const columns =
     [
         { title: "Name", dataIndex: "product_name", key: "product_name" },
         { title: "Description", dataIndex: "product_description", key: "product_description" },
         { title: "Creation Date", dataIndex: "date_uploaded", key: "date_uploaded" },
         { title: "Last Modified Date", dataIndex: "date_edited", key: "date_edited" },
-        { title: "*", dataIndex: "editDelete", key: "editDelete" }
+        { title: "", dataIndex: "editDelete", key: "editDelete" }
     ]
     return (
         <Layout style={{height: "90vh", padding: "4rem 2rem"}}>

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Input, Row, Button, notification } from "antd";
 
-//const corsShortFix = "https://cors-anywhere.herokuapp.com/";
-
-const backendUrl = "http://localhost:8080"//"https://avios-api.herokuapp.com";
+const backendUrl = "https://avios-api.herokuapp.com";
 
 export default props =>
 {
@@ -63,7 +61,7 @@ export default props =>
                 }
                 else
                 {
-                    notification.success({ message: "Done", body: "Product successfully saved" });
+                    notification.success({ message: "Product successfully saved" });
                     refresh();
                     setTimeout(() => handleCancel(), 300)
                 }
@@ -93,7 +91,7 @@ export default props =>
                 }
                 else
                 {
-                    notification.success({ message: "Done", body: "Product successfully saved" });
+                    notification.success({ message: "Product successfully saved" });
                     refresh();
                     setTimeout(() => handleCancel(), 300)
                 }
