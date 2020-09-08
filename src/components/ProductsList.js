@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Layout, Button, notification, Row } from "antd";
+import { EditFilled, DeleteFilled } from '@ant-design/icons';
+import moment from "moment";
 import AddEditProductsModal from "./AddEditProductsModal";
 
-const backendUrl = "https://avios-api.herokuapp.com";
+const backendUrl = "http://localhost:8080"//"https://avios-api.herokuapp.com";
 
 export default props =>
 {
@@ -15,20 +17,32 @@ export default props =>
     {
         try
         {
-        setIsLoading(true);
-        const resp = await fetch(backendUrl);
-        const products = await resp.json();
-        if (Array.isArray(products))
-        {
-            setProducts(products.map(prod => (
+            setIsLoading(true);
+            const resp = await fetch(backendUrl);
+            const products = await resp.json();
+            if (Array.isArray(products))
             {
-                ...prod,
-                editDelete: (
-                    <Row justify="space-around">
-                        <Button icon="edit" onClick={() => handleEdit(prod)}></Button>
-                        <Button icon="delete" onClick={() => handleDelete(prod)}></Button>
-                    </Row>)
-            })))
+                setProducts(products.map(prod => (
+                {
+                    ...prod,
+                    key: prod.id,
+                    date_uploaded: moment(prod.date_uploaded).format("LLL"),
+                    date_edited: moment(prod.date_edited).format("LLL"),
+                    editDelete: (
+                        <Row justify="center">
+                            <Button
+                                type="primary"
+                                icon={<EditFilled />}
+                                onClick={() => handleEdit(prod)}
+                            />
+                            <Button
+                                type="default"
+                                style={{color: "red", marginLeft: 10}}
+                                icon={<DeleteFilled />}
+                                onClick={() => handleDelete(prod)}
+                            />
+                        </Row>)
+                })))
         }
         setIsLoading(false);
         }
@@ -85,6 +99,7 @@ export default props =>
                 product={product}
                 visible={showAddEditModal}
                 cancel={closeModal}
+                refresh={fetchProducts}
             />
         </Layout>
     )

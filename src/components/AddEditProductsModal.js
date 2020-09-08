@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Input, Row, Button, notification } from "antd";
 
-const corsShortFix = "https://cors-anywhere.herokuapp.com/";
+//const corsShortFix = "https://cors-anywhere.herokuapp.com/";
 
-const backendUrl = "https://avios-api.herokuapp.com";
+const backendUrl = "http://localhost:8080"//"https://avios-api.herokuapp.com";
 
 export default props =>
 {
-    const { visible, product, cancel } = props;
+    const { visible, product, cancel, refresh } = props;
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -18,20 +18,28 @@ export default props =>
     {
         if (product)
         {
-            setName(product.name || "");
-            setDescription(product.description || "");
-            setVarieties(product.varieties || []);
+            setName(product.product_name || "");
+            setDescription(product.product_description || "");
+            setVarieties(product.product_varieties || []);
         }
     }, [product])
+
+    const handleCancel = () =>
+    {
+        setName("");
+        setDescription("");
+        setVarieties([]);
+        cancel();
+    }
 
     const handleSubmit = async () =>
     {
         setIsSaving(true);
         try
         {
-            if (product)
+            if (product && product.id)
             {
-                const resp = await fetch(`${corsShortFix}/${backendUrl}`,
+                const resp = await fetch(backendUrl,
                 {
                     method: "PUT",
                     headers:
@@ -39,19 +47,30 @@ export default props =>
                         'Content-Type': 'application/json',
                         'Origin': 'test-client'
                     },
-                    body:
+                    body: JSON.stringify(
                     {
+                        id: product.id,
                         product_name: name,
                         product_description: description,
                         product_varieties: varieties
-                    }
+                    })
                 });
                 const json = await resp.json();
-                console.log(json);
+                if (json.error)
+                {
+                    console.log("error: ", json.error)
+                    notification.error({ message: `Error occured: ${json.error}` });
+                }
+                else
+                {
+                    notification.success({ message: "Done", body: "Product successfully saved" });
+                    refresh();
+                    setTimeout(() => handleCancel(), 300)
+                }
             }
             else
             {
-                const resp = await fetch(`${corsShortFix}/${backendUrl}`,
+                const resp = await fetch(backendUrl,
                 {
                     method: "POST",
                     headers:
@@ -59,15 +78,25 @@ export default props =>
                         'Content-Type': 'application/json',
                         'Origin': 'test-client'
                     },
-                    body:
+                    body: JSON.stringify(
                     {
                         product_name: name,
                         product_description: description,
                         product_varieties: varieties
-                    }
+                    }),
                 });
                 const json = await resp.json();
-                console.log(json);
+                if (json.error)
+                {
+                    console.log("error: ", json.error)
+                    notification.error({ message: `Error occured: ${json.error}` });
+                }
+                else
+                {
+                    notification.success({ message: "Done", body: "Product successfully saved" });
+                    refresh();
+                    setTimeout(() => handleCancel(), 300)
+                }
             }
         }
         catch(e)
@@ -82,7 +111,7 @@ export default props =>
         <Modal
             destroyOnClose
             visible={visible}
-            onCancel={cancel}
+            onCancel={handleCancel}
             footer={null}
         >
             <Row style={{margin: "1rem 0"}}>
