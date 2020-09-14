@@ -42,8 +42,10 @@ export default props =>
         setIsLoading(true);
         try
         {
+            const corsFix = `https://cors-anywhere.herokuapp.com`
+
             const url = `https://newsapi.org/v2/everything?q=${searchStr}&page=${page}`;
-            const resp = await fetch(url,
+            const resp = await fetch(`${corsFix}/${url}`,
             {
                 headers:
                 {
