@@ -1,12 +1,11 @@
 import React from 'react';
-import ProductsList from "./components/ProductsList";
+import NewsList from "./components/NewsList";
 import "antd/dist/antd.css";
 
 export default _props =>
 {
-  
-
   return (
-    <ProductsList />
+      <NewsList />
+    // <NewsList />
   );
 }

@@ -1,0 +1,98 @@
+.news-list .ant-menu-vertical > .ant-menu-item, .ant-menu-vertical-left > .ant-menu-item, .ant-menu-vertical-right > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-left > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-right > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title
+{
+    height: auto !important;
+}
+
+.news-list .ant-layout-footer
+{
+    padding: 20px;
+}
+.news-list .ant-alert
+{
+    font-size: 16px;
+}
+.news-list .click-to-expand
+{
+    position: absolute;
+    font-size: 11px;
+    transition: 0.2s ease-out;
+    right: 0;
+    bottom: 2%;
+}
+.news-list .ant-menu-submenu-open .click-to-expand
+{
+    bottom: -3rem;
+}
+.news-list.click-to-collapse
+{
+    position: absolute;
+    font-size: 11px;
+    transition: 0.2s ease-out;
+    right: 0;
+    bottom: -3rem
+}
+.news-list .ant-menu-submenu-open .click-to-collapse
+{
+    bottom: 2%;
+}
+.news-list .ant-menu-item
+{
+    margin-left: 0 !important;
+    padding: 10px !important;
+    width: 100% !important;
+}
+.news-list .ant-menu-submenu-title
+{
+    padding-left: 10px !important;
+}
+.news-list .order-products
+{
+    width: 100%;
+    margin: 7px 0;
+    white-space: normal;
+    display: flex;
+}
+
+.news-list .ant-menu-item *
+{
+    line-height: normal !important;
+    white-space: normal;
+}
+.ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline), .ant-menu-item-selected,
+.ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover
+{
+    color: unset;
+}
+.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title
+{
+    height: auto;
+    line-height: normal;
+    white-space: normal;
+}
+.ant-menu-submenu-title
+{
+    border: 3px solid dimgray;
+}
+
+@media (max-width: 760px)
+{
+    .news-list .ant-layout-content
+    {
+        width: 100% !important;
+    }
+    .news-list .ant-layout-content > div
+    {
+        width: 100% !important;
+        padding: 10px !important;
+    }
+
+    .news-list .ant-layout-header
+    {
+        padding: 0 20px;
+    }
+    .news-list .ant-layout-header img
+    {
+        height: 30px !important;
+        width: 50px !important;
+    }
+}
